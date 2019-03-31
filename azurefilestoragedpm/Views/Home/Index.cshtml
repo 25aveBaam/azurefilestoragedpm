@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    List<string> ficheros = ViewBag.Ficheros as List<string>;
+}
+
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="margen">
+        <h2>Archivos disponibles:</h2>
+        @if (ficheros != null)
+        {
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>NOMBRE</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in ficheros)
+                    {
+                        <tr>
+                            <td>@s</td>
+                            @if (s != "ficheromuestra.txt")
+                            {
+                                <td>@Html.ActionLink("Eliminar fichero", "Index", "Home", new { accion = "eliminar", fichero = s }, null)</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No hay elementos disponibles.</p>
+        }
+    </div>
+
+    <div class="margen">
+        <h2>Subir archivo:</h2>
+
+        <div class="form-group">
+            <label for="ficheroSubir">Selecciona un fichero para subirlo a Azure Storage:</label>
+            <input type="file" class="form-control-file" name="ficheroSubir">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" name="accion" value="subir" class="btn btn-primary form-control">Subir fichero</button>
+        </div>
+    </div>
+}
